@@ -22,18 +22,6 @@ const state = () => {
         icon: 'BookOpenIcon',
         pageName: prefix + 'deal',
         title: 'deal_management.deal',
-        subMenu: [
-          {
-            icon: '',
-            pageName: prefix + 'deal',
-            title: 'deal_management.deal_list'
-          },
-          {
-            icon: '',
-            pageName: prefix + 'task',
-            title: 'task_management'
-          }
-        ]
       }
     ]
   }

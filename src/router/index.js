@@ -1,19 +1,20 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Login from "@/views/login/index.vue";
-const SideMenu = () => import('../layouts/side-menu/Main.vue')
+const DashBoard = () => import('../views/dashboard/index.vue')
 
 import route from './route'
 
 const routes = [
   {
     path: '/',
-    component: SideMenu,
+    component: DashBoard,
     meta: { requiresAuth: true },
     children: route('side-menu')
   },
   {
     path: '/login',
     name: 'login',
+    meta: { requiresAuth: true },
     component: Login
   },
 ];
