@@ -1,4 +1,4 @@
-# deal
+# Cinema98
 
 ## Project setup
 
