@@ -84,7 +84,7 @@ export default defineComponent({
       login(formData)
           .then((res) => {
             store.dispatch('auth/loginSuccess', res)
-            router.push('/dashboard')
+            router.push('/')
             console.log(store.state.auth.isLoggedIn)
             loading.value = false
           })

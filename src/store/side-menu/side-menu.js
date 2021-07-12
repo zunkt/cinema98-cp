@@ -11,18 +11,33 @@ const state = () => {
       {
         icon: 'UserIcon',
         pageName: prefix + 'user',
-        title: 'user_management'
+        title: 'user-manager'
       },
       {
-        icon: 'UserCheckIcon',
-        pageName: prefix + 'contact',
-        title: 'contact_management'
+        icon: 'MenuIcon',
+        pageName: prefix + 'movie',
+        title: 'movie-manager'
       },
       {
-        icon: 'BookOpenIcon',
-        pageName: prefix + 'deal',
-        title: 'deal_management.deal',
-      }
+        icon: 'PackageIcon',
+        pageName: prefix + 'ticket',
+        title: 'ticket-manager'
+      },
+      {
+        icon: 'ToggleLeftIcon',
+        pageName: prefix + 'theater',
+        title: 'theater-manager'
+      },
+      {
+        icon: 'ArrowUpRightIcon',
+        pageName: prefix + 'schedule',
+        title: 'schedule-manager'
+      },
+      {
+        icon: 'BarChartIcon',
+        pageName: prefix + 'bill',
+        title: 'bill-manager'
+      },
     ]
   }
 }

@@ -5,9 +5,6 @@ import store from './store'
 import './libs'
 
 import globalComponents from './global-components'
-import DashboardLayout from './components/DashboardLayout/index.vue';
-import EmptyLayout from './components/EmptyLayout/index.vue';
-
 import utils from './utils'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -33,8 +30,6 @@ const app = createApp(App)
     .use(i18n)
     .use(VueAxios, axios)
 
-app.component('default-layout', DashboardLayout);
-app.component('empty-layout', EmptyLayout);
 globalComponents(app)
 utils(app)
 
