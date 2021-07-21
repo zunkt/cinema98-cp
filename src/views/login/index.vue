@@ -55,7 +55,6 @@ export default defineComponent({
       email: '',
       password: ''
     })
-    console.log(store.state.auth.isLoggedIn)
     const ruleLogin = validateFormLogin(form)
     const handleSubmit = ruleLogin.handleSubmit
 
@@ -85,7 +84,6 @@ export default defineComponent({
           .then((res) => {
             store.dispatch('auth/loginSuccess', res)
             router.push('/')
-            console.log(store.state.auth.isLoggedIn)
             loading.value = false
           })
           .catch((error) => {

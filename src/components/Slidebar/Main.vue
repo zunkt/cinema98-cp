@@ -51,12 +51,12 @@
                 }"
                 @click="linkTo(menu, router)"
             >
-                <div class="side-menu__icon">
-                  <component :is="menu.icon" />
-                </div>
-                <div class="side-menu__title">
-                  <span class="mx-4">{{ $t(menu.title) }}</span>
-                </div>
+              <div class="side-menu__icon">
+                <component :is="menu.icon"/>
+              </div>
+              <div class="side-menu__title">
+                <span class="mx-4">{{ $t(menu.title) }}</span>
+              </div>
             </SideMenuTooltip>
           </li>
         </template>
@@ -66,12 +66,12 @@
 </template>
 
 <script lang="js">
-import { useI18n } from 'vue-i18n'
-import { defineComponent, computed, onMounted, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useStore } from '@/store'
-import { helper as $h } from '@/utils/helper'
-import { linkTo, nestedMenu, enter, leave } from './index'
+import {useI18n} from 'vue-i18n'
+import {defineComponent, computed, onMounted, ref, watch} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
+import {useStore} from '@/store'
+import {helper as $h} from '@/utils/helper'
+import {linkTo, nestedMenu, enter, leave} from './index'
 import cash from "cash-dom";
 import SideMenuTooltip from '@/components/side-menu-tooltip/Main.vue'
 
@@ -80,7 +80,7 @@ export default defineComponent({
     SideMenuTooltip
   },
   setup() {
-    const { t } = useI18n()
+    const {t} = useI18n()
     const route = useRoute()
     const router = useRouter()
     const store = useStore()
@@ -91,7 +91,6 @@ export default defineComponent({
     watch(
         computed(() => route.path),
         () => {
-          console.log(1,sideMenu.value)
           formattedMenu.value = $h.toRaw(sideMenu.value)
         }
     )
@@ -103,7 +102,6 @@ export default defineComponent({
           .addClass('main')
       formattedMenu.value = $h.toRaw(sideMenu.value)
     })
-    console.log(formattedMenu)
     return {
       t,
       formattedMenu,
@@ -115,31 +113,3 @@ export default defineComponent({
   }
 })
 </script>
-
-
-
-
-
-
-
-
-
-<!--import { defineComponent, ref } from "vue";-->
-<!--import { useSidebar } from "@/hooks/useSidebar";-->
-<!--export default defineComponent({-->
-<!--setup() {-->
-<!--const { isOpen } = useSidebar();-->
-<!--const activeClass = ref(-->
-<!--"bg-gray-600 bg-opacity-25 text-gray-100 border-gray-100"-->
-<!--);-->
-<!--const inactiveClass = ref(-->
-<!--"border-gray-900 text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-gray-100"-->
-<!--);-->
-
-<!--return {-->
-<!--isOpen,-->
-<!--activeClass,-->
-<!--inactiveClass,-->
-<!--};-->
-<!--},-->
-<!--});-->

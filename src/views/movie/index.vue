@@ -12,7 +12,7 @@
                 v-model="filter.field"
                 class="min-w-full h-full py-2 text-sm border border-gray-600 focus:outline-none rounded pl-2 text-gray-900"
             >
-              <option :value="null" disabled>Please Select Search: </option>
+              <option :value="null" disabled>Please Select Search:</option>
               <option
                   v-for="(item, index) in option"
                   :key="index"
@@ -61,13 +61,116 @@
       ></div>
     </div>
     <loading :active="loading" :z-index="101"></loading>
+    <v-modal :show="showModal" @close="showModal = false">
+      <div style="height: 600px; width: 500px; overflow-y: scroll;">
+        <div class="block overflow-y-auto scrollbar-hidden  p-5 text-center">
+          <template v-if="modalType == 'edit'">
+            <table class="table table--sm">
+              <tbody>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Name</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.name"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-1/3 border border-gray-600 bg-gray-300">Image</td>
+                <td class="border border-gray-600 ">
+                  <img
+                      v-if="state.image_url !== null && state.checkImage === 0"
+                      class="w-auto mx-auto rounded-full object-cover object-center"
+                      :src="state.updateMovie.image_url"
+                      alt="Image Upload"
+                  />
+                  <img
+                      v-else
+                      class="w-auto mx-auto rounded-full object-cover object-center"
+                      :src="imageUrl"
+                      alt="Image Upload"
+                  />
+                  <label class="cursor-pointer mt-6">
+                    <span class="mt-2 text-base leading-normal px-4 py-2 bg-blue-500 text-white text-sm rounded-full">Select Image</span>
+                    <input
+                        type='file'
+                        class="hidden"
+                        name="avatar"
+                        id="avatar"
+                        @change="updatePreview"
+                        style="display: none;"
+                    />
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Trailer Url</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.trailer_url"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Director</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.director"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Language</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.language"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Actor</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.actor"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Year</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.year"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Long Time</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.long_time"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Rating</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.rating"/>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </template>
+        </div>
+        <div class="px-5 pb-8 text-center">
+          <button
+              type="button"
+              class="btn w-24 border text-gray-700 dark:border-dark-5 dark:text-gray-300 mr-1"
+              @click="showModal = false"
+          >
+            Cancel
+          </button>
+          <button
+              type="button"
+              class="btn w-24 border text-gray-700 dark:border-dark-5 dark:text-gray-300 mr-1"
+              @click="submitModal(modalType)"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </v-modal>
   </div>
 </template>
 
 <script>
-import { defineComponent, onMounted, ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
-import { useTabulator } from '@/composables'
+import {defineComponent, onMounted, ref, reactive, watch} from 'vue'
+import {useTabulator} from '@/composables'
 import cash from "cash-dom";
 import axios from "axios";
 import Toastify from "toastify-js";
@@ -89,7 +192,7 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/movie/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
@@ -105,7 +208,7 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/movie/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
@@ -120,7 +223,7 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/movie/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
@@ -135,7 +238,7 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/movie/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
@@ -143,7 +246,6 @@ export default defineComponent({
           field: 'language',
           resizable: false,
           formatter(cell) {
-            console.log(cell.getData().language)
             return `<div class="flex items-center justify-center">
                 ${(cell.getData().language)}
               </div>`
@@ -151,7 +253,7 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/movie/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
@@ -159,7 +261,6 @@ export default defineComponent({
           field: 'actor',
           resizable: false,
           formatter(cell) {
-            console.log(cell.getData().actor)
             return `<div class="flex items-center justify-center">
                 ${(cell.getData().actor)}
               </div>`
@@ -167,7 +268,7 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/movie/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
@@ -175,7 +276,6 @@ export default defineComponent({
           field: 'year',
           resizable: false,
           formatter(cell) {
-            console.log(cell.getData().year)
             return `<div class="flex items-center justify-center">
                 ${(cell.getData().year)}
               </div>`
@@ -183,7 +283,7 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/movie/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
@@ -191,7 +291,6 @@ export default defineComponent({
           field: 'long_time',
           resizable: false,
           formatter(cell) {
-            console.log(cell.getData().long_time)
             return `<div class="flex items-center justify-center">
                 ${(cell.getData().long_time)}
               </div>`
@@ -199,7 +298,7 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/movie/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
@@ -207,7 +306,6 @@ export default defineComponent({
           field: 'rating',
           resizable: false,
           formatter(cell) {
-            console.log(cell.getData().rating)
             return `<div class="flex items-center justify-center">
                 ${(cell.getData().rating)}
               </div>`
@@ -215,7 +313,7 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/movie/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
@@ -231,7 +329,7 @@ export default defineComponent({
                   Delete Movie
                 </div>`)
             cash(a).on('click', function () {
-              openModal(cell.getData().id);
+              openModal('delete', cell.getData().id, cell.getData());
             })
 
             return a[0]
@@ -242,13 +340,15 @@ export default defineComponent({
       listTabulator.reInitOnResizeWindow()
     })
 
-    const router = useRouter()
     const loading = ref(false)
-    const option = ref([
-      { key: 'id', value: 'id' },
-      { key: 'email', value: 'email' }
-    ])
+    const modalType = ref('')
+    const showModal = ref(false)
     const deleteId = ref('')
+
+    const option = ref([
+      {key: 'id', value: 'id'},
+      {key: 'name', value: 'name'}
+    ])
 
     const filter = reactive({
       field: null,
@@ -257,13 +357,41 @@ export default defineComponent({
       submitted: false
     })
 
+    const state = reactive({
+      user: {},
+      updateMovie: {
+        id: '',
+        name: '',
+        image: '',
+        trailer_url: '',
+        director: '',
+        language: '',
+        actor: '',
+        year: '',
+        long_time: '',
+        rating: '',
+      },
+      image_url: '',
+      checkImage: 0,
+      selectedFile: null
+    })
+
     const tableRef = ref()
     const tabulator = ref()
     const listTabulator = useTabulator(tabulator, tableRef)
 
-    const openModal = (id) => {
-      deleteId.value = id
-      submitDelete()
+    const openModal = (type, id, item) => {
+      if (type == 'edit') {
+        state.updateMovie = {...item}
+        state.image_url = item.image_url
+
+        modalType.value = type
+        showModal.value = true
+      }
+      if (type == 'delete') {
+        deleteId.value = id
+        submitDelete()
+      }
     }
 
     // Delete
@@ -285,18 +413,91 @@ export default defineComponent({
           })
     }
 
+    const closeModal = () => {
+      showModal.value = false
+    }
+
+    const submitModal = (type) => {
+      loading.value = true
+      if (type === 'edit') {
+        let data = new FormData;
+        data.append('name', state.updateMovie.name)
+        if (checkImage == 1)
+          data.append('image', state.updateMovie.image)
+        data.append('trailer_url', state.updateMovie.trailer_url)
+        data.append('director', state.updateMovie.director)
+        data.append('language', state.updateMovie.language)
+        data.append('actor', state.updateMovie.actor)
+        data.append('year', state.updateMovie.year)
+        data.append('long_time', state.updateMovie.long_time)
+        data.append('rating', state.updateMovie.rating)
+        const id = state.updateMovie.id
+        axios.post(`admin/movie/update/${id}`, data)
+            .then((res) => {
+              if (res.status === 200) {
+                const data = res.data.data.movie
+                tabulator.value.updateData([data]).then(() => {
+                  loading.value = false
+                  Toastify({
+                    text: res.data.message,
+                    duration: 3000,
+                    newWindow: false,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                  }).showToast();
+                  closeModal()
+                })
+              }
+            })
+      }
+    }
+
     // Filter function
     const onFilter = () => {
       filter.submitted = true
       tabulator.value.setFilter(filter.field, filter.type, filter.value)
     }
 
+    const imageFile = ref('')
+    const imageUrl = ref('')
+    var checkImage;
+    function updatePreview(e) {
+      if (e.target.files.length === 0) {
+        return
+      }
+      imageFile.value = e.target.files[0]
+      state.updateMovie.image = e.target.files[0]
+      state.selectedFile = e.target.files[0]
+      checkImage = 1;
+    }
+
+    watch(imageFile, (imageFile) => {
+      const fileReader = new FileReader()
+
+      if (imageFile) {
+        fileReader.readAsDataURL(imageFile)
+        fileReader.addEventListener('load', () => {
+          imageUrl.value = fileReader.result
+        })
+      }
+      state.checkImage = 1
+    })
+
     return {
+      showModal,
+      state,
+      openModal,
       option,
       loading,
       tableRef,
       filter,
-      onFilter
+      onFilter,
+      modalType,
+      updatePreview,
+      imageUrl,
+      submitModal
     }
   }
 })

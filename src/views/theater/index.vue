@@ -176,7 +176,6 @@ export default defineComponent({
     const tableRef = ref()
     const tabulator = ref()
     const listTabulator = useTabulator(tabulator, tableRef)
-    console.log(listTabulator)
     // Filter function
     const onFilter = () => {
       filter.submitted = true

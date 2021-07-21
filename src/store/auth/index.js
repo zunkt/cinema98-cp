@@ -13,7 +13,6 @@ export default {
   mutations: {
     loginSuccess(state, payload) {
       state.isLoggedIn = true
-      console.log(payload.data.token)
       localStorage.setItem('token', payload.data.token)
     },
     logout(state) {
@@ -23,7 +22,6 @@ export default {
     },
     setCurrentUser(state, user) {
       state.currentUser = user
-      // console.log(state.currentUser)
       state.isLoggedIn = true
     }
   },

@@ -8,7 +8,6 @@ export default function useTabulator(tabulator, tabulatorRef) {
 
   const initTabulator = (apiUrl, data, columns, filter, rowClick, layout = 'fitColumns') => {
     const token = localStorage.getItem('token')
-    // console.log(token)
 
     tabulator.value = new Tabulator(tabulatorRef.value, {
       ajaxURL: process.env.VUE_APP_API_URL + apiUrl,
@@ -30,7 +29,6 @@ export default function useTabulator(tabulator, tabulatorRef) {
       // responsiveLayout: "collapse",
       placeholder: 'Nothing To Show',
       ajaxResponse: function(url, params, response) {
-        console.log('data: ', response.data)
         if (typeof (filter) == 'undefined' || filter.field == null) {
           if (typeof (response.data.deals) !== 'undefined') {
             const rs = response.data.deals
@@ -44,7 +42,6 @@ export default function useTabulator(tabulator, tabulatorRef) {
             return rs
           } else {
             const rs = response.data[data]
-            // console.log(rs)
             if (rs && rs.meta) {
               Object.entries(rs.meta).forEach(x => {
                 rs[x[0]] = x[1]
@@ -71,7 +68,6 @@ export default function useTabulator(tabulator, tabulatorRef) {
           }
         } else {
           const rs = response.data[data]
-          console.log('rs', rs)
           if (rs && rs.meta) {
             Object.entries(rs.meta).forEach(x => {
               rs[x[0]] = x[1]

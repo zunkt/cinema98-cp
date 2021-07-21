@@ -5,6 +5,7 @@ import Tippy from './tippy/Main.vue'
 import TippyContent from './tippy-content/Main.vue'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import Litepicker from './litepicker/Main.vue'
+import Vmodal from "./modal/v-modal.vue";
 
 export default app => {
   app.component('Loading', Loading)
@@ -12,6 +13,7 @@ export default app => {
   app.component('Tippy', Tippy)
   app.component('TippyContent', TippyContent)
   app.component('Litepicker', Litepicker)
+  app.component("VModal", Vmodal);
 
   for (const [key, icon] of Object.entries(featherIcons)) {
     icon.props.size.default = '24'

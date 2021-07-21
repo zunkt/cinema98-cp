@@ -3,7 +3,6 @@ import Velocity from 'velocity-animate'
 // Setup side menu
 const findActiveMenu = (subMenu, route) => {
   let match = false
-  console.log(2222)
   subMenu.forEach(item => {
     if (item.pageName === route.name && !item.ignore) {
       match = true
@@ -15,7 +14,6 @@ const findActiveMenu = (subMenu, route) => {
 }
 
 const nestedMenu = (menu, route) => {
-  console.log(1111)
   menu.forEach((item, key) => {
     if (typeof item !== 'string') {
       let menuItem = menu[key]
@@ -41,11 +39,9 @@ const linkTo = (menu, router) => {
   if (menu.subMenu) {
     menu.activeDropdown = !menu.activeDropdown
   } else {
-    console.log('menu before: ', menu)
     router.push({
       name: menu.pageName
     })
-    console.log('menu after: ', menu)
   }
 }
 
