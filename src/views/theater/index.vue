@@ -61,14 +61,73 @@
       ></div>
     </div>
     <loading :active="loading" :z-index="101"></loading>
+
+    <v-modal :show="showModal" @close="showModal = false">
+      <div style="width:400px">
+        <div class="p-5 text-center">
+          <template v-if="modalType == 'edit'">
+            <table class="table table--sm">
+              <tbody>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Name</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateTheater.name"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-1/3 border border-gray-600">Address</td>
+                <td class="border bg-gray border-gray-600">
+                  <input class="input form-control w-full border"
+                         v-model="state.updateTheater.address"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Phone</td>
+                <td class="border border-gray-600 ">
+                  <input
+                      type="tel"
+                      pattern="[0-9]{10}"
+                      minlength="0"
+                      maxlength="10"
+                      class="input form-control w-full border"
+                      @input="handleUserInput"
+                      v-model="state.updateTheater.phone"
+                      required
+                  />
+                  <span class="validity"></span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </template>
+        </div>
+        <div class="px-5 pb-8 text-center">
+          <button
+              type="button"
+              class="btn w-24 border text-gray-700 dark:border-dark-5 dark:text-gray-300 mr-1"
+              @click="showModal = false"
+          >
+            Cancel
+          </button>
+          <button
+              type="button"
+              class="btn w-24 border text-gray-700 dark:border-dark-5 dark:text-gray-300 mr-1"
+              @click="submitModal(modalType)"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </v-modal>
   </div>
 </template>
 
 <script>
-import { defineComponent, onMounted, ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
-import { useTabulator } from '@/composables'
+import {defineComponent, onMounted, reactive, ref} from 'vue'
+import {useTabulator} from '@/composables'
 import cash from "cash-dom";
+import axios from "axios";
+import Toastify from "toastify-js";
 
 export default defineComponent({
   components: {},
@@ -87,7 +146,7 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/user/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
@@ -102,7 +161,7 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/ticket/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
@@ -117,7 +176,7 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/theater/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
@@ -132,14 +191,14 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/ticket/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
           title: 'Delete',
           field: 'id',
           resizable: false,
-          formatter() {
+          formatter(cell) {
             const a = cash(`<div class="flex lg:justify-center items-center">
                 <button
                   class="text-white right-1 active:bg-gray-600 font-bold w-40 text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none bg-gray-500"
@@ -148,7 +207,7 @@ export default defineComponent({
                   Delete Theater
                 </div>`)
             cash(a).on('click', function () {
-              // openModal('deleteCoupon', cell.getData().id);
+              openModal('delete', cell.getData().id, cell.getData());
             })
 
             return a[0]
@@ -159,12 +218,20 @@ export default defineComponent({
       listTabulator.reInitOnResizeWindow()
     })
 
-    const router = useRouter()
     const loading = ref(false)
     const option = ref([
       { key: 'id', value: 'id' },
       { key: 'email', value: 'email' }
     ])
+
+    const state = reactive({
+      updateTheater: {
+        id: '',
+        name: '',
+        address: '',
+        phone: '',
+      }
+    })
 
     const filter = reactive({
       field: null,
@@ -175,6 +242,7 @@ export default defineComponent({
 
     const tableRef = ref()
     const tabulator = ref()
+    const deleteId = ref('')
     const listTabulator = useTabulator(tabulator, tableRef)
     // Filter function
     const onFilter = () => {
@@ -182,7 +250,84 @@ export default defineComponent({
       tabulator.value.setFilter(filter.field, filter.type, filter.value)
     }
 
+    // Delete
+    const submitDelete = () => {
+      loading.value = true
+      axios.post(`admin/theater/delete/${deleteId.value}`)
+          .then((res) => {
+            loading.value = false
+            Toastify({
+              text: res.data.message,
+              duration: 3000,
+              newWindow: false,
+              close: true,
+              gravity: "top",
+              position: "right",
+              stopOnFocus: true,
+            }).showToast();
+            tabulator.value.replaceData()
+          })
+    }
+
+    const closeModal = () => {
+      showModal.value = false
+    }
+
+    const submitModal = (type) => {
+      loading.value = true
+      if (type === 'edit') {
+        const form = {...state.updateTheater}
+        const id = form.id
+        axios.post(`admin/theater/update/${id}`, form)
+            .then((res) => {
+              if (res.status === 200) {
+                const data = res.data.data.theater
+                tabulator.value.updateData([data]).then(() => {
+                  loading.value = false
+                  Toastify({
+                    text: res.data.message,
+                    duration: 3000,
+                    newWindow: false,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                  }).showToast();
+                  closeModal()
+                })
+              }
+            })
+      }
+    }
+
+    const modalType = ref('')
+    const showModal = ref(false)
+    // Open Modal
+    const openModal = (type, id, item) => {
+      if (type == 'edit') {
+        state.updateTheater = {...item}
+
+        modalType.value = type
+
+        showModal.value = true
+      }
+      if (type == 'delete') {
+        deleteId.value = id
+        submitDelete()
+      }
+    }
+
+    const handleUserInput = () => {
+      state.updateTheater.phone = state.updateTheater.phone.replace(/[^\d]/g, '')
+    }
+
     return {
+      handleUserInput,
+      submitModal,
+      state,
+      modalType,
+      openModal,
+      showModal,
       option,
       loading,
       tableRef,

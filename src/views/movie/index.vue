@@ -49,6 +49,15 @@
               </button>
             </span>
           </div>
+          <div class="flex relative justify-end text-gray-600">
+            <button
+                type="button"
+                class="btn w-24 border text-gray-700 dark:border-dark-5 dark:text-gray-300 mr-1"
+                @click="showModal"
+            >
+              Add
+            </button>
+          </div>
         </div>
       </form>
     </div>
@@ -484,6 +493,8 @@ export default defineComponent({
       }
       state.checkImage = 1
     })
+
+    // Add Movie
 
     return {
       showModal,
