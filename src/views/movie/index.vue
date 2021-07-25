@@ -53,7 +53,7 @@
             <button
                 type="button"
                 class="btn w-24 border text-gray-700 dark:border-dark-5 dark:text-gray-300 mr-1"
-                @click="showModal"
+                @click="openModal('add')"
             >
               Add
             </button>
@@ -155,6 +155,88 @@
               </tbody>
             </table>
           </template>
+          <template v-if="modalType == 'add'">
+            <table class="table table--sm">
+              <tbody>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Name</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.name"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-1/3 border border-gray-600 bg-gray-300">Image</td>
+                <td class="border border-gray-600 ">
+                  <img
+                      v-if="state.image_url !== null && state.checkImage === 0"
+                      class="w-auto mx-auto rounded-full object-cover object-center"
+                      :src="state.updateMovie.image_url"
+                      alt="Image Upload"
+                  />
+                  <img
+                      v-else
+                      class="w-auto mx-auto rounded-full object-cover object-center"
+                      :src="imageUrl"
+                      alt="Image Upload"
+                  />
+                  <label class="cursor-pointer mt-6">
+                    <span class="mt-2 text-base leading-normal px-4 py-2 bg-blue-500 text-white text-sm rounded-full">Select Image</span>
+                    <input
+                        type='file'
+                        class="hidden"
+                        name="add-avatar"
+                        id="add-avatar"
+                        @change="updatePreview"
+                        style="display: none;"
+                    />
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Trailer Url</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.trailer_url"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Director</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.director"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Language</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.language"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Actor</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.actor"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Year</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.year"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Long Time</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.long_time"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Rating</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.rating"/>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </template>
         </div>
         <div class="px-5 pb-8 text-center">
           <button
@@ -169,7 +251,7 @@
               class="btn w-24 border text-gray-700 dark:border-dark-5 dark:text-gray-300 mr-1"
               @click="submitModal(modalType)"
           >
-            Update
+            {{ modalType == 'add' ? 'Add' : 'Update' }}
           </button>
         </div>
       </div>
@@ -401,6 +483,11 @@ export default defineComponent({
         deleteId.value = id
         submitDelete()
       }
+
+      if (type == 'add') {
+        modalType.value = type
+        showModal.value = true
+      }
     }
 
     // Delete
@@ -459,6 +546,44 @@ export default defineComponent({
                   closeModal()
                 })
               }
+            })
+      }
+      if (type === 'add') {
+        let data = new FormData;
+        data.append('name', state.updateMovie.name)
+        if (checkImage == 1)
+          data.append('image', state.updateMovie.image)
+        data.append('trailer_url', state.updateMovie.trailer_url)
+        data.append('director', state.updateMovie.director)
+        data.append('language', state.updateMovie.language)
+        data.append('actor', state.updateMovie.actor)
+        data.append('year', state.updateMovie.year)
+        data.append('long_time', state.updateMovie.long_time)
+        data.append('rating', state.updateMovie.rating)
+        axios.post(`admin/movie/store`, data)
+            .then((res) => {
+              if (res.status === 200) {
+                const data = res.data.data.movie
+                console.log(data)
+
+                tabulator.value.updateData([data]).then(() => {
+                  loading.value = false
+                  Toastify({
+                    text: res.data.message,
+                    duration: 3000,
+                    newWindow: false,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                  }).showToast();
+                  closeModal()
+                })
+              }
+            })
+            .catch(() => {
+              closeModal()
+
             })
       }
     }
