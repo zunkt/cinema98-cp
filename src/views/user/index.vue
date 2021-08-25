@@ -263,15 +263,15 @@ export default defineComponent({
     const openModal = (type, id, item) => {
       if (type == 'edit') {
         state.updateInfo = {...item}
+
+        modalType.value = type
+
+        showModal.value = true
       }
       if (type == 'delete') {
         deleteId.value = id
         submitDelete()
       }
-
-      modalType.value = type
-
-      showModal.value = true
     }
 
     const closeModal = () => {

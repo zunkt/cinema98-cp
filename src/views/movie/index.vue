@@ -82,40 +82,40 @@
                   <input class="input form-control w-full border" v-model="state.updateMovie.name"/>
                 </td>
               </tr>
-              <tr>
-                <td class="w-1/3 border border-gray-600 bg-gray-300">Image</td>
-                <td class="border border-gray-600 ">
-                  <img
-                      v-if="state.image_url !== null && state.checkImage === 0"
-                      class="w-auto mx-auto rounded-full object-cover object-center"
-                      :src="state.updateMovie.image_url"
-                      alt="Image Upload"
-                  />
-                  <img
-                      v-else
-                      class="w-auto mx-auto rounded-full object-cover object-center"
-                      :src="imageUrl"
-                      alt="Image Upload"
-                  />
-                  <label class="cursor-pointer mt-6">
-                    <span class="mt-2 text-base leading-normal px-4 py-2 bg-blue-500 text-white text-sm rounded-full">Select Image</span>
-                    <input
-                        type='file'
-                        class="hidden"
-                        name="avatar"
-                        id="avatar"
-                        @change="updatePreview"
-                        style="display: none;"
-                    />
-                  </label>
-                </td>
-              </tr>
-              <tr>
-                <td class="border border-gray-600 bg-gray-300">Trailer Url</td>
-                <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.trailer_url"/>
-                </td>
-              </tr>
+<!--              <tr>-->
+<!--                <td class="w-1/3 border border-gray-600 bg-gray-300">Image</td>-->
+<!--                <td class="border border-gray-600 ">-->
+<!--                  <img-->
+<!--                      v-if="state.image_url !== null && state.checkImage === 0"-->
+<!--                      class="w-auto mx-auto rounded-full object-cover object-center"-->
+<!--                      :src="state.updateMovie.image_url"-->
+<!--                      alt="Image Upload"-->
+<!--                  />-->
+<!--                  <img-->
+<!--                      v-else-->
+<!--                      class="w-auto mx-auto rounded-full object-cover object-center"-->
+<!--                      :src="imageUrl"-->
+<!--                      alt="Image Upload"-->
+<!--                  />-->
+<!--                  <label class="cursor-pointer mt-6">-->
+<!--                    <span class="mt-2 text-base leading-normal px-4 py-2 bg-blue-500 text-white text-sm rounded-full">Select Image</span>-->
+<!--                    <input-->
+<!--                        type='file'-->
+<!--                        class="hidden"-->
+<!--                        name="avatar"-->
+<!--                        id="avatar"-->
+<!--                        @change="updatePreview"-->
+<!--                        style="display: none;"-->
+<!--                    />-->
+<!--                  </label>-->
+<!--                </td>-->
+<!--              </tr>-->
+<!--              <tr>-->
+<!--                <td class="border border-gray-600 bg-gray-300">Trailer Url</td>-->
+<!--                <td class="border border-gray-600 ">-->
+<!--                  <input class="input form-control w-full border" v-model="state.updateMovie.trailer_url"/>-->
+<!--                </td>-->
+<!--              </tr>-->
               <tr>
                 <td class="border border-gray-600 bg-gray-300">Director</td>
                 <td class="border border-gray-600 ">
@@ -150,6 +150,36 @@
                 <td class="border border-gray-600 bg-gray-300">Rating</td>
                 <td class="border border-gray-600 ">
                   <input class="input form-control w-full border" v-model="state.updateMovie.rating"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Description Content</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.descriptionContent"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Type</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.type"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">ImageText</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.imageText"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Background Image</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.backgroundImage"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">ReleaseDate</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.releaseDate"/>
                 </td>
               </tr>
               </tbody>
@@ -164,40 +194,40 @@
                   <input class="input form-control w-full border" v-model="state.updateMovie.name"/>
                 </td>
               </tr>
-              <tr>
-                <td class="w-1/3 border border-gray-600 bg-gray-300">Image</td>
-                <td class="border border-gray-600 ">
-                  <img
-                      v-if="state.image_url !== null && state.checkImage === 0"
-                      class="w-auto mx-auto rounded-full object-cover object-center"
-                      :src="state.updateMovie.image_url"
-                      alt="Image Upload"
-                  />
-                  <img
-                      v-else
-                      class="w-auto mx-auto rounded-full object-cover object-center"
-                      :src="imageUrl"
-                      alt="Image Upload"
-                  />
-                  <label class="cursor-pointer mt-6">
-                    <span class="mt-2 text-base leading-normal px-4 py-2 bg-blue-500 text-white text-sm rounded-full">Select Image</span>
-                    <input
-                        type='file'
-                        class="hidden"
-                        name="add-avatar"
-                        id="add-avatar"
-                        @change="updatePreview"
-                        style="display: none;"
-                    />
-                  </label>
-                </td>
-              </tr>
-              <tr>
-                <td class="border border-gray-600 bg-gray-300">Trailer Url</td>
-                <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.trailer_url"/>
-                </td>
-              </tr>
+<!--              <tr>-->
+<!--                <td class="w-1/3 border border-gray-600 bg-gray-300">Image</td>-->
+<!--                <td class="border border-gray-600 ">-->
+<!--                  <img-->
+<!--                      v-if="state.image_url !== null && state.checkImage === 0"-->
+<!--                      class="w-auto mx-auto rounded-full object-cover object-center"-->
+<!--                      :src="state.updateMovie.image_url"-->
+<!--                      alt="Image Upload"-->
+<!--                  />-->
+<!--                  <img-->
+<!--                      v-else-->
+<!--                      class="w-auto mx-auto rounded-full object-cover object-center"-->
+<!--                      :src="imageUrl"-->
+<!--                      alt="Image Upload"-->
+<!--                  />-->
+<!--                  <label class="cursor-pointer mt-6">-->
+<!--                    <span class="mt-2 text-base leading-normal px-4 py-2 bg-blue-500 text-white text-sm rounded-full">Select Image</span>-->
+<!--                    <input-->
+<!--                        type='file'-->
+<!--                        class="hidden"-->
+<!--                        name="add-avatar"-->
+<!--                        id="add-avatar"-->
+<!--                        @change="updatePreview"-->
+<!--                        style="display: none;"-->
+<!--                    />-->
+<!--                  </label>-->
+<!--                </td>-->
+<!--              </tr>-->
+<!--              <tr>-->
+<!--                <td class="border border-gray-600 bg-gray-300">Trailer Url</td>-->
+<!--                <td class="border border-gray-600 ">-->
+<!--                  <input class="input form-control w-full border" v-model="state.updateMovie.trailer_url"/>-->
+<!--                </td>-->
+<!--              </tr>-->
               <tr>
                 <td class="border border-gray-600 bg-gray-300">Director</td>
                 <td class="border border-gray-600 ">
@@ -232,6 +262,36 @@
                 <td class="border border-gray-600 bg-gray-300">Rating</td>
                 <td class="border border-gray-600 ">
                   <input class="input form-control w-full border" v-model="state.updateMovie.rating"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Description Content</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.descriptionContent"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Type</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.type"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">ImageText</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.imageText"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Background Image</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.backgroundImage"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">ReleaseDate</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.releaseDate"/>
                 </td>
               </tr>
               </tbody>
@@ -260,7 +320,8 @@
 </template>
 
 <script>
-import {defineComponent, onMounted, ref, reactive, watch} from 'vue'
+// import {defineComponent, onMounted, ref, reactive, watch} from 'vue'
+import {defineComponent, onMounted, ref, reactive} from 'vue'
 import {useTabulator} from '@/composables'
 import cash from "cash-dom";
 import axios from "axios";
@@ -295,21 +356,6 @@ export default defineComponent({
             return `<div class="flex items-center justify-center">
                 ${(cell.getData().name)}
               </div>`
-          },
-          cellClick: function (e, cell) {
-            e.preventDefault()
-            e.stopPropagation()
-            openModal('edit', cell.getData().id, cell.getData());
-          }
-        },
-        {
-          title: 'Trailer Url',
-          field: 'trailer_url',
-          resizable: false,
-          formatter(cell) {
-            return `<div class="flex items-center justify-center">
-                  ${(cell.getData().trailer_url)}
-                </div>`
           },
           cellClick: function (e, cell) {
             e.preventDefault()
@@ -454,13 +500,17 @@ export default defineComponent({
         id: '',
         name: '',
         image: '',
-        trailer_url: '',
         director: '',
         language: '',
         actor: '',
         year: '',
         long_time: '',
         rating: '',
+        descriptionContent: '',
+        type: '',
+        imageText: '',
+        backgroundImage: '',
+        releaseDate: ''
       },
       image_url: '',
       checkImage: 0,
@@ -516,19 +566,8 @@ export default defineComponent({
     const submitModal = (type) => {
       loading.value = true
       if (type === 'edit') {
-        let data = new FormData;
-        data.append('name', state.updateMovie.name)
-        if (checkImage == 1)
-          data.append('image', state.updateMovie.image)
-        data.append('trailer_url', state.updateMovie.trailer_url)
-        data.append('director', state.updateMovie.director)
-        data.append('language', state.updateMovie.language)
-        data.append('actor', state.updateMovie.actor)
-        data.append('year', state.updateMovie.year)
-        data.append('long_time', state.updateMovie.long_time)
-        data.append('rating', state.updateMovie.rating)
         const id = state.updateMovie.id
-        axios.post(`admin/movie/update/${id}`, data)
+        axios.post(`admin/movie/update/${id}`, state.updateMovie)
             .then((res) => {
               if (res.status === 200) {
                 const data = res.data.data.movie
@@ -546,47 +585,68 @@ export default defineComponent({
                   closeModal()
                 })
               }
+            })
+            .catch(err => {
+              loading.value = false
+              Toastify({
+                text: err.response.data.message,
+                duration: 3000,
+                newWindow: false,
+                close: true,
+                gravity: "top",
+                position: "right",
+                stopOnFocus: true,
+              }).showToast();
             })
       }
       if (type === 'add') {
-        let data = new FormData;
-        data.append('name', state.updateMovie.name)
-        if (checkImage == 1)
-          data.append('image', state.updateMovie.image)
-        data.append('trailer_url', state.updateMovie.trailer_url)
-        data.append('director', state.updateMovie.director)
-        data.append('language', state.updateMovie.language)
-        data.append('actor', state.updateMovie.actor)
-        data.append('year', state.updateMovie.year)
-        data.append('long_time', state.updateMovie.long_time)
-        data.append('rating', state.updateMovie.rating)
-        axios.post(`admin/movie/store`, data)
-            .then((res) => {
-              if (res.status === 200) {
-                const data = res.data.data.movie
-                console.log(data)
-
-                tabulator.value.updateData([data]).then(() => {
-                  loading.value = false
-                  Toastify({
-                    text: res.data.message,
-                    duration: 3000,
-                    newWindow: false,
-                    close: true,
-                    gravity: "top",
-                    position: "right",
-                    stopOnFocus: true,
-                  }).showToast();
-                  closeModal()
-                })
-              }
-            })
-            .catch(() => {
+        axios.post(`admin/movie/store`, state.updateMovie)
+          .then((res) => {
+            if (res.status === 200) {
+              // const data = res.data.data.movie
+              Toastify({
+                text: res.data.message,
+                duration: 3000,
+                newWindow: false,
+                close: true,
+                gravity: "top",
+                position: "right",
+                stopOnFocus: true,
+              }).showToast();
               closeModal()
-
-            })
+              setTimeout(function () {
+                loading.value = false
+                window.location.reload();
+              }, 500)
+            }
+          })
+          .catch(err => {
+            loading.value = false
+            Toastify({
+              text: err.response.data.message,
+              duration: 3000,
+              newWindow: false,
+              close: true,
+              gravity: "top",
+              position: "right",
+              stopOnFocus: true,
+            }).showToast();
+          })
       }
     }
+
+    // new Promise((resolve, reject) => {
+    //   axios.post(`admin/movie/store`, state.updateMovie)
+    //       .then((res) => {
+    //         console.log(resolve);
+    //         console.log(res);
+    //       })
+    //       .catch(err => {
+    //         console.log(err.response.data);
+    //         console.log(reject(err.response.data));
+    //         reject(err.response.data)
+    //       })
+    // })
 
     // Filter function
     const onFilter = () => {
@@ -594,30 +654,30 @@ export default defineComponent({
       tabulator.value.setFilter(filter.field, filter.type, filter.value)
     }
 
-    const imageFile = ref('')
-    const imageUrl = ref('')
-    var checkImage;
-    function updatePreview(e) {
-      if (e.target.files.length === 0) {
-        return
-      }
-      imageFile.value = e.target.files[0]
-      state.updateMovie.image = e.target.files[0]
-      state.selectedFile = e.target.files[0]
-      checkImage = 1;
-    }
-
-    watch(imageFile, (imageFile) => {
-      const fileReader = new FileReader()
-
-      if (imageFile) {
-        fileReader.readAsDataURL(imageFile)
-        fileReader.addEventListener('load', () => {
-          imageUrl.value = fileReader.result
-        })
-      }
-      state.checkImage = 1
-    })
+    // const imageFile = ref('')
+    // const imageUrl = ref('')
+    // var checkImage;
+    // function updatePreview(e) {
+    //   if (e.target.files.length === 0) {
+    //     return
+    //   }
+    //   imageFile.value = e.target.files[0]
+    //   state.updateMovie.image = e.target.files[0]
+    //   state.selectedFile = e.target.files[0]
+    //   checkImage = 1;
+    // }
+    //
+    // watch(imageFile, (imageFile) => {
+    //   const fileReader = new FileReader()
+    //
+    //   if (imageFile) {
+    //     fileReader.readAsDataURL(imageFile)
+    //     fileReader.addEventListener('load', () => {
+    //       imageUrl.value = fileReader.result
+    //     })
+    //   }
+    //   state.checkImage = 1
+    // })
 
     // Add Movie
 
@@ -631,8 +691,8 @@ export default defineComponent({
       filter,
       onFilter,
       modalType,
-      updatePreview,
-      imageUrl,
+      // updatePreview,
+      // imageUrl,
       submitModal
     }
   }
