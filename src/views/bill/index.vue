@@ -61,14 +61,98 @@
       ></div>
     </div>
     <loading :active="loading" :z-index="101"></loading>
+
+    <v-modal :show="showModal" @close="showModal = false">
+      <div style="width:400px">
+        <div class="p-5 text-center">
+          <template v-if="modalType == 'edit'">
+            <table class="table table--sm">
+              <tbody>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Price</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateBill.price"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Status</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border"
+                         v-model="state.updateBill.status"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Ticket</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border"
+                         style="background-color: lightgrey"
+                         onkeydown="return false"
+                         v-model="state.updateBill.ticket.name"/>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <table class="table table--sm">
+              <tbody>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Name</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border"
+                         style="background-color: lightgrey"
+                         onkeydown="return false"
+                         v-model="state2.updateInfo.name"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-1/3 border border-gray-600">Schedule</td>
+                <td class="border bg-gray border-gray-600">
+                  <input class="input form-control w-full border"
+                         style="background-color: lightgrey"
+                         onkeydown="return false"
+                         v-model="state2.updateSchedule.time_start"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">User</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border"
+                         style="background-color: lightgrey"
+                         onkeydown="return false"
+                         v-model="state2.updateUser.full_name"/>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </template>
+        </div>
+        <div class="px-5 pb-8 text-center">
+          <button
+              type="button"
+              class="btn w-24 border text-gray-700 dark:border-dark-5 dark:text-gray-300 mr-1"
+              @click="showModal = false"
+          >
+            Cancel
+          </button>
+          <button
+              type="button"
+              class="btn w-24 border text-gray-700 dark:border-dark-5 dark:text-gray-300 mr-1"
+              @click="submitModal(modalType)"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </v-modal>
   </div>
 </template>
 
 <script>
 import { defineComponent, onMounted, ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
 import { useTabulator } from '@/composables'
 import cash from "cash-dom";
+import axios from "axios";
+import Toastify from "toastify-js";
+import dayjs from "dayjs";
 
 export default defineComponent({
   components: {},
@@ -87,7 +171,7 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/user/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
@@ -102,7 +186,7 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/bill/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
@@ -117,7 +201,7 @@ export default defineComponent({
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/bill/show/${cell.getData().id}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
@@ -126,20 +210,20 @@ export default defineComponent({
           resizable: false,
           formatter(cell) {
             return `<div class="flex items-center justify-center">
-                ${(cell.getData().ticket_id)}
+                ${(cell.getData().ticket.name)}
               </div>`
           },
           cellClick: function (e, cell) {
             e.preventDefault()
             e.stopPropagation()
-            router.push(`/user/show/${cell.getData().identityNumber}`)
+            openModal('edit', cell.getData().id, cell.getData());
           }
         },
         {
           title: 'Delete',
           field: 'id',
           resizable: false,
-          formatter() {
+          formatter(cell) {
             const a = cash(`<div class="flex lg:justify-center items-center">
                 <button
                   class="text-white right-1 active:bg-gray-600 font-bold w-40 text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none bg-gray-500"
@@ -148,7 +232,7 @@ export default defineComponent({
                   Delete Bill
                 </div>`)
             cash(a).on('click', function () {
-              // openModal('deleteCoupon', cell.getData().id);
+              openModal('delete', cell.getData().id, cell.getData());
             })
 
             return a[0]
@@ -159,7 +243,6 @@ export default defineComponent({
       listTabulator.reInitOnResizeWindow()
     })
 
-    const router = useRouter()
     const loading = ref(false)
     const option = ref([
       { key: 'id', value: 'id' },
@@ -173,6 +256,142 @@ export default defineComponent({
       submitted: false
     })
 
+    const state = reactive({
+      updateBill: {
+        id: '',
+        price: '',
+        status: '',
+        ticket_id: '',
+        ticket: '',
+      }
+    })
+
+    const state2 = reactive({
+      user: {},
+      updateInfo: {
+        id: '',
+        name  : '',
+        schedule_id: '',
+        user_id: '',
+      },
+      updateSchedule: {
+        id: '',
+        name: '',
+        time_start: '',
+        time_end: '',
+        movie_id: '',
+      },
+      updateUser: {
+        id: '',
+        email: '',
+        full_name: '',
+        identityNumber: '',
+        address: '',
+      },
+    })
+
+    const deleteId = ref('')
+
+    // Open Modal
+    const openModal = (type, id, item) => {
+      if (type == 'edit') {
+        state.updateBill = {...item}
+
+        loading.value = true
+        axios.get(`admin/ticket/show/${state.updateBill.ticket_id}`)
+            .then((res) => {
+              if (res.status === 200) {
+                state2.updateInfo = {...res.data.data.ticket,
+                  'schedule_id': res.data.data.ticket.schedule.id,
+                  'user_id': res.data.data.ticket.user.id
+                }
+
+                state2.updateSchedule = {...res.data.data.ticket,
+                  'time_start': dayjs(res.data.data.ticket.schedule.time_start).format('YYYY-MM-DD HH:mm:ss')
+                }
+
+                state2.updateUser = {...res.data.data.ticket.user}
+
+                loading.value = false
+              }
+            })
+
+        modalType.value = type
+
+        showModal.value = true
+      }
+      if (type == 'delete') {
+        deleteId.value = id
+        submitDelete()
+      }
+    }
+
+    const modalType = ref('')
+    const showModal = ref(false)
+    const closeModal = () => {
+      showModal.value = false
+    }
+    const submitModal = (type) => {
+      loading.value = true
+      if (type === 'edit') {
+        if (state.updateBill.status !== 'success' || state.updateBill.status !== "pending" ||  state.updateBill.status !== "booked") {
+          Toastify({
+            text: "Status not valid. Please check again",
+            duration: 3000,
+            newWindow: false,
+            close: true,
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
+          }).showToast();
+          loading.value = false
+        } else {
+          const form = {...state.updateBill}
+          const id = form.id
+          axios.post(`admin/bill/update/${id}`, form)
+              .then((res) => {
+                if (res.status === 200) {
+                  const data = res.data.data.bill
+                  tabulator.value.updateData([data]).then(() => {
+                    loading.value = false
+                    Toastify({
+                      text: res.data.message,
+                      duration: 3000,
+                      newWindow: false,
+                      close: true,
+                      gravity: "top",
+                      position: "right",
+                      stopOnFocus: true,
+                    }).showToast();
+                    closeModal()
+                  })
+                }
+              })
+        }
+      }
+    }
+
+    // Delete
+    const submitDelete = () => {
+      loading.value = true
+      axios.post(`admin/bill/delete/${deleteId.value}`)
+          .then((res) => {
+            loading.value = false
+            Toastify({
+              text: res.data.message,
+              duration: 3000,
+              newWindow: false,
+              close: true,
+              gravity: "top",
+              position: "right",
+              stopOnFocus: true,
+            }).showToast();
+            tabulator.value.replaceData()
+          })
+    }
+
+
+
     const tableRef = ref()
     const tabulator = ref()
     const listTabulator = useTabulator(tabulator, tableRef)
@@ -183,6 +402,12 @@ export default defineComponent({
     }
 
     return {
+      state2,
+      state,
+      openModal,
+      submitModal,
+      showModal,
+      modalType,
       option,
       loading,
       tableRef,

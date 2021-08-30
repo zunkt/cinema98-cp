@@ -71,7 +71,7 @@
               <tr>
                 <td class="border border-gray-600 bg-gray-300">Name</td>
                 <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateSchedule.name"/>
+                  <input class="input form-control w-full border" v-model="state.updateMovie.name"/>
                 </td>
               </tr>
               <tr>
@@ -89,46 +89,13 @@
               </tbody>
             </table>
             <h2>Schedule Movie</h2>
+
             <table class="table table--sm">
               <tbody>
               <tr>
                 <td class="border border-gray-600 bg-gray-300">Name</td>
                 <td class="border border-gray-600 ">
                   <input class="input form-control w-full border" v-model="state.updateMovie.name"/>
-                </td>
-              </tr>
-              <tr>
-                <td class="w-1/3 border border-gray-600 bg-gray-300">Image</td>
-                <td class="border border-gray-600 ">
-                  <img
-                      v-if="state.image_url !== null && state.checkImage === 0"
-                      class="w-auto mx-auto rounded-full object-cover object-center"
-                      :src="state.updateMovie.image_url"
-                      alt="Image Upload"
-                  />
-                  <img
-                      v-else
-                      class="w-auto mx-auto rounded-full object-cover object-center"
-                      :src="imageUrl"
-                      alt="Image Upload"
-                  />
-                  <label class="cursor-pointer mt-6">
-                    <span class="mt-2 text-base leading-normal px-4 py-2 bg-blue-500 text-white text-sm rounded-full">Select Image</span>
-                    <input
-                        type='file'
-                        class="hidden"
-                        name="avatar"
-                        id="avatar"
-                        @change="updatePreview"
-                        style="display: none;"
-                    />
-                  </label>
-                </td>
-              </tr>
-              <tr>
-                <td class="border border-gray-600 bg-gray-300">Trailer Url</td>
-                <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.trailer_url"/>
                 </td>
               </tr>
               <tr>
@@ -167,6 +134,36 @@
                   <input class="input form-control w-full border" v-model="state.updateMovie.rating"/>
                 </td>
               </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Description Content</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.descriptionContent"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Type</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.type"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">ImageText</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.imageText"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Background Image</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.backgroundImage"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">ReleaseDate</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.releaseDate"/>
+                </td>
+              </tr>
               </tbody>
             </table>
           </template>
@@ -193,7 +190,7 @@
 </template>
 
 <script>
-import {defineComponent, onMounted, ref, reactive, watch} from 'vue'
+import {defineComponent, onMounted, ref, reactive} from 'vue'
 import {useTabulator} from '@/composables'
 import cash from "cash-dom";
 import dayjs from 'dayjs';
@@ -222,12 +219,12 @@ export default defineComponent({
           }
         },
         {
-          title: 'Name',
+          title: 'Name Movie',
           field: 'name',
           resizable: false,
           formatter(cell) {
             return `<div class="flex items-center justify-center">
-                ${(cell.getData().name)}
+                ${(cell.getData().movie.name)}
               </div>`
           },
           cellClick: function (e, cell) {
@@ -258,21 +255,6 @@ export default defineComponent({
           formatter(cell) {
             return `<div class="flex items-center justify-center">
                     ${dayjs(cell.getData().time_end).format('HH:mm:ss YYYY-MM-DD')}
-              </div>`
-          },
-          cellClick: function (e, cell) {
-            e.preventDefault()
-            e.stopPropagation()
-            openModal('edit', cell.getData().id, cell.getData());
-          }
-        },
-        {
-          title: 'Movie',
-          field: 'movie_id',
-          resizable: false,
-          formatter(cell) {
-            return `<div class="flex items-center justify-center">
-                ${(cell.getData().movie_id)}
               </div>`
           },
           cellClick: function (e, cell) {
@@ -329,18 +311,23 @@ export default defineComponent({
         time_start: '',
         time_end: '',
         movie_id: '',
+        room_id: '',
       },
       updateMovie: {
         id: '',
         name: '',
         image: '',
-        trailer_url: '',
         director: '',
         language: '',
         actor: '',
         year: '',
         long_time: '',
         rating: '',
+        descriptionContent: '',
+        type: '',
+        imageText: '',
+        backgroundImage: '',
+        releaseDate: ''
       },
       image_url: '',
       checkImage: 0,
@@ -357,22 +344,8 @@ export default defineComponent({
           time_start: moment(new Date(item.time_start)).format('YYYY-MM-DDTHH:mm'),
           time_end: moment(new Date(item.time_end)).format('YYYY-MM-DDTHH:mm'),
         }
+        state.updateMovie = {...item.movie}
 
-        if (item.movie_id != 0) {
-          state.updateMovie = item.movie_id
-
-          axios.get(`admin/movie/show/${state.updateMovie}`)
-              .then((res) => {
-                if (res.status === 200) {
-                  const data = res.data.data.movie
-                  if (typeof(data) != undefined) {
-                    state.updateMovie = {...data}
-                    state.image_url = item.image_url
-                  }
-                  // console.log(state.updateMovie)
-                }
-              })
-        }
         modalType.value = type
         showModal.value = true
       }
@@ -410,19 +383,9 @@ export default defineComponent({
       if (type === 'edit') {
 
         // Update movie
-        let data = new FormData;
-        data.append('name', state.updateMovie.name)
-        if (checkImage == 1)
-          data.append('image', state.updateMovie.image)
-        data.append('trailer_url', state.updateMovie.trailer_url)
-        data.append('director', state.updateMovie.director)
-        data.append('language', state.updateMovie.language)
-        data.append('actor', state.updateMovie.actor)
-        data.append('year', state.updateMovie.year)
-        data.append('long_time', state.updateMovie.long_time)
-        data.append('rating', state.updateMovie.rating)
+
         const id = state.updateMovie.id
-        axios.post(`admin/movie/update/${id}`, data)
+        axios.post(`admin/movie/update/${id}`, state.updateMovie)
             .then((res) => {
               if (res.status === 200) {
                 const data = res.data.data.movie
@@ -432,6 +395,7 @@ export default defineComponent({
         const form = {...state.updateSchedule,
           movie_id: state.updateMovie.id
         }
+        console.log()
         const idSchedule = form.id
         console.log(id)
         axios.post(`admin/schedule/update/${idSchedule}`, form)
@@ -462,36 +426,36 @@ export default defineComponent({
       tabulator.value.setFilter(filter.field, filter.type, filter.value)
     }
 
-    // Movie
-    const imageFile = ref('')
-    const imageUrl = ref('')
+    // // Movie
+    // const imageFile = ref('')
+    // const imageUrl = ref('')
 
-    var checkImage;
-    function updatePreview(e) {
-      if (e.target.files.length === 0) {
-        return
-      }
-      imageFile.value = e.target.files[0]
-      state.updateMovie.image = e.target.files[0]
-      state.selectedFile = e.target.files[0]
-      checkImage = 1;
-    }
+    // var checkImage;
+    // function updatePreview(e) {
+    //   if (e.target.files.length === 0) {
+    //     return
+    //   }
+    //   imageFile.value = e.target.files[0]
+    //   state.updateMovie.image = e.target.files[0]
+    //   state.selectedFile = e.target.files[0]
+    //   checkImage = 1;
+    // }
 
-    watch(imageFile, (imageFile) => {
-      const fileReader = new FileReader()
-
-      if (imageFile) {
-        fileReader.readAsDataURL(imageFile)
-        fileReader.addEventListener('load', () => {
-          imageUrl.value = fileReader.result
-        })
-      }
-      state.checkImage = 1
-    })
+    // watch(imageFile, (imageFile) => {
+    //   const fileReader = new FileReader()
+    //
+    //   if (imageFile) {
+    //     fileReader.readAsDataURL(imageFile)
+    //     fileReader.addEventListener('load', () => {
+    //       imageUrl.value = fileReader.result
+    //     })
+    //   }
+    //   state.checkImage = 1
+    // })
 
     return {
-      imageUrl,
-      updatePreview,
+      // imageUrl,
+      // updatePreview,
       showModal,
       state,
       modalType,

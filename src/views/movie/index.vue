@@ -82,40 +82,6 @@
                   <input class="input form-control w-full border" v-model="state.updateMovie.name"/>
                 </td>
               </tr>
-<!--              <tr>-->
-<!--                <td class="w-1/3 border border-gray-600 bg-gray-300">Image</td>-->
-<!--                <td class="border border-gray-600 ">-->
-<!--                  <img-->
-<!--                      v-if="state.image_url !== null && state.checkImage === 0"-->
-<!--                      class="w-auto mx-auto rounded-full object-cover object-center"-->
-<!--                      :src="state.updateMovie.image_url"-->
-<!--                      alt="Image Upload"-->
-<!--                  />-->
-<!--                  <img-->
-<!--                      v-else-->
-<!--                      class="w-auto mx-auto rounded-full object-cover object-center"-->
-<!--                      :src="imageUrl"-->
-<!--                      alt="Image Upload"-->
-<!--                  />-->
-<!--                  <label class="cursor-pointer mt-6">-->
-<!--                    <span class="mt-2 text-base leading-normal px-4 py-2 bg-blue-500 text-white text-sm rounded-full">Select Image</span>-->
-<!--                    <input-->
-<!--                        type='file'-->
-<!--                        class="hidden"-->
-<!--                        name="avatar"-->
-<!--                        id="avatar"-->
-<!--                        @change="updatePreview"-->
-<!--                        style="display: none;"-->
-<!--                    />-->
-<!--                  </label>-->
-<!--                </td>-->
-<!--              </tr>-->
-<!--              <tr>-->
-<!--                <td class="border border-gray-600 bg-gray-300">Trailer Url</td>-->
-<!--                <td class="border border-gray-600 ">-->
-<!--                  <input class="input form-control w-full border" v-model="state.updateMovie.trailer_url"/>-->
-<!--                </td>-->
-<!--              </tr>-->
               <tr>
                 <td class="border border-gray-600 bg-gray-300">Director</td>
                 <td class="border border-gray-600 ">
