@@ -75,80 +75,88 @@
         <div class="block overflow-y-auto scrollbar-hidden  p-5 text-center">
           <template v-if="modalType == 'edit'">
             <table class="table table--sm">
-              <tbody>
-              <tr>
-                <td class="border border-gray-600 bg-gray-300">Name</td>
-                <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.name"/>
-                </td>
-              </tr>
-              <tr>
-                <td class="border border-gray-600 bg-gray-300">Director</td>
-                <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.director"/>
-                </td>
-              </tr>
-              <tr>
-                <td class="border border-gray-600 bg-gray-300">Language</td>
-                <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.language"/>
-                </td>
-              </tr>
-              <tr>
-                <td class="border border-gray-600 bg-gray-300">Actor</td>
-                <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.actor"/>
-                </td>
-              </tr>
-              <tr>
-                <td class="border border-gray-600 bg-gray-300">Year</td>
-                <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.year"/>
-                </td>
-              </tr>
-              <tr>
-                <td class="border border-gray-600 bg-gray-300">Long Time</td>
-                <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.long_time"/>
-                </td>
-              </tr>
-              <tr>
-                <td class="border border-gray-600 bg-gray-300">Rating</td>
-                <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.rating"/>
-                </td>
-              </tr>
-              <tr>
-                <td class="border border-gray-600 bg-gray-300">Description Content</td>
-                <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.descriptionContent"/>
-                </td>
-              </tr>
-              <tr>
-                <td class="border border-gray-600 bg-gray-300">Type</td>
-                <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.type"/>
-                </td>
-              </tr>
-              <tr>
-                <td class="border border-gray-600 bg-gray-300">ImageText</td>
-                <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.imageText"/>
-                </td>
-              </tr>
-              <tr>
-                <td class="border border-gray-600 bg-gray-300">Background Image</td>
-                <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.backgroundImage"/>
-                </td>
-              </tr>
-              <tr>
-                <td class="border border-gray-600 bg-gray-300">ReleaseDate</td>
-                <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.releaseDate"/>
-                </td>
-              </tr>
-              </tbody>
+              <table class="table table--sm">
+                <tbody>
+                <tr>
+                  <td class="border border-gray-600 bg-gray-300">Name</td>
+                  <td class="border border-gray-600 ">
+                    <input class="input form-control w-full border" v-model="state.updateMovie.name"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border border-gray-600 bg-gray-300">Trailer Url</td>
+                  <td class="border border-gray-600 ">
+                    <input class="input form-control w-full border" v-model="state.updateMovie.trailer_url" required/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border border-gray-600 bg-gray-300">Director</td>
+                  <td class="border border-gray-600 ">
+                    <input class="input form-control w-full border" v-model="state.updateMovie.director" required/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border border-gray-600 bg-gray-300">Language</td>
+                  <td class="border border-gray-600 ">
+                    <input class="input form-control w-full border" v-model="state.updateMovie.language" required/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border border-gray-600 bg-gray-300">Actor</td>
+                  <td class="border border-gray-600 ">
+                    <input class="input form-control w-full border" v-model="state.updateMovie.actor" required/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border border-gray-600 bg-gray-300">Year</td>
+                  <td class="border border-gray-600 ">
+                    <input class="input form-control w-full border" v-model="state.updateMovie.year" required/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border border-gray-600 bg-gray-300">Long Time</td>
+                  <td class="border border-gray-600 ">
+                    <input class="input form-control w-full border" v-model="state.updateMovie.long_time" required/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border border-gray-600 bg-gray-300">Rating</td>
+                  <td class="border border-gray-600 ">
+                    <input class="input form-control w-full border" v-model="state.updateMovie.rating" required/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border border-gray-600 bg-gray-300">Description Content</td>
+                  <td class="border border-gray-600 ">
+                    <input class="input form-control w-full border" v-model="state.updateMovie.descriptionContent" required/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border border-gray-600 bg-gray-300">Type</td>
+                  <td class="border border-gray-600 ">
+                    <input class="input form-control w-full border" v-model="state.updateMovie.type" required/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border border-gray-600 bg-gray-300">ImageText</td>
+                  <td class="border border-gray-600 ">
+                    <input class="input form-control w-full border" v-model="state.updateMovie.imageText" required/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border border-gray-600 bg-gray-300">Background Image</td>
+                  <td class="border border-gray-600 ">
+                    <input class="input form-control w-full border" v-model="state.updateMovie.backgroundImage" required/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border border-gray-600 bg-gray-300">ReleaseDate</td>
+                  <td class="border border-gray-600 ">
+                    <input type="date" id="date-start" class="input form-control w-full border" v-model="state.updateMovie.releaseDate" required/>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
             </table>
           </template>
           <template v-if="modalType == 'add'">
@@ -160,104 +168,76 @@
                   <input class="input form-control w-full border" v-model="state.updateMovie.name"/>
                 </td>
               </tr>
-<!--              <tr>-->
-<!--                <td class="w-1/3 border border-gray-600 bg-gray-300">Image</td>-->
-<!--                <td class="border border-gray-600 ">-->
-<!--                  <img-->
-<!--                      v-if="state.image_url !== null && state.checkImage === 0"-->
-<!--                      class="w-auto mx-auto rounded-full object-cover object-center"-->
-<!--                      :src="state.updateMovie.image_url"-->
-<!--                      alt="Image Upload"-->
-<!--                  />-->
-<!--                  <img-->
-<!--                      v-else-->
-<!--                      class="w-auto mx-auto rounded-full object-cover object-center"-->
-<!--                      :src="imageUrl"-->
-<!--                      alt="Image Upload"-->
-<!--                  />-->
-<!--                  <label class="cursor-pointer mt-6">-->
-<!--                    <span class="mt-2 text-base leading-normal px-4 py-2 bg-blue-500 text-white text-sm rounded-full">Select Image</span>-->
-<!--                    <input-->
-<!--                        type='file'-->
-<!--                        class="hidden"-->
-<!--                        name="add-avatar"-->
-<!--                        id="add-avatar"-->
-<!--                        @change="updatePreview"-->
-<!--                        style="display: none;"-->
-<!--                    />-->
-<!--                  </label>-->
-<!--                </td>-->
-<!--              </tr>-->
-<!--              <tr>-->
-<!--                <td class="border border-gray-600 bg-gray-300">Trailer Url</td>-->
-<!--                <td class="border border-gray-600 ">-->
-<!--                  <input class="input form-control w-full border" v-model="state.updateMovie.trailer_url"/>-->
-<!--                </td>-->
-<!--              </tr>-->
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Trailer Url</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateMovie.trailer_url" required/>
+                </td>
+              </tr>
               <tr>
                 <td class="border border-gray-600 bg-gray-300">Director</td>
                 <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.director"/>
+                  <input class="input form-control w-full border" v-model="state.updateMovie.director" required/>
                 </td>
               </tr>
               <tr>
                 <td class="border border-gray-600 bg-gray-300">Language</td>
                 <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.language"/>
+                  <input class="input form-control w-full border" v-model="state.updateMovie.language" required/>
                 </td>
               </tr>
               <tr>
                 <td class="border border-gray-600 bg-gray-300">Actor</td>
                 <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.actor"/>
+                  <input class="input form-control w-full border" v-model="state.updateMovie.actor" required/>
                 </td>
               </tr>
               <tr>
                 <td class="border border-gray-600 bg-gray-300">Year</td>
                 <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.year"/>
+                  <input class="input form-control w-full border" v-model="state.updateMovie.year" required/>
                 </td>
               </tr>
               <tr>
                 <td class="border border-gray-600 bg-gray-300">Long Time</td>
                 <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.long_time"/>
+                  <input class="input form-control w-full border" v-model="state.updateMovie.long_time" required/>
                 </td>
               </tr>
               <tr>
                 <td class="border border-gray-600 bg-gray-300">Rating</td>
                 <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.rating"/>
+                  <input class="input form-control w-full border" v-model="state.updateMovie.rating" required/>
                 </td>
               </tr>
               <tr>
                 <td class="border border-gray-600 bg-gray-300">Description Content</td>
                 <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.descriptionContent"/>
+                  <input class="input form-control w-full border" v-model="state.updateMovie.descriptionContent" required/>
                 </td>
               </tr>
               <tr>
                 <td class="border border-gray-600 bg-gray-300">Type</td>
                 <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.type"/>
+                  <input class="input form-control w-full border" v-model="state.updateMovie.type" required/>
                 </td>
               </tr>
               <tr>
                 <td class="border border-gray-600 bg-gray-300">ImageText</td>
                 <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.imageText"/>
+                  <input class="input form-control w-full border" v-model="state.updateMovie.imageText" required/>
                 </td>
               </tr>
               <tr>
                 <td class="border border-gray-600 bg-gray-300">Background Image</td>
                 <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.backgroundImage"/>
+                  <input class="input form-control w-full border" v-model="state.updateMovie.backgroundImage" required/>
                 </td>
               </tr>
               <tr>
                 <td class="border border-gray-600 bg-gray-300">ReleaseDate</td>
                 <td class="border border-gray-600 ">
-                  <input class="input form-control w-full border" v-model="state.updateMovie.releaseDate"/>
+                  <input type="date" id="date-start" class="input form-control w-full border" v-model="state.updateMovie.releaseDate" required/>
                 </td>
               </tr>
               </tbody>
@@ -466,6 +446,7 @@ export default defineComponent({
         id: '',
         name: '',
         image: '',
+        trailer_url: '',
         director: '',
         language: '',
         actor: '',

@@ -49,6 +49,15 @@
               </button>
             </span>
           </div>
+          <div class="flex relative justify-end text-gray-600">
+            <button
+                type="button"
+                class="btn w-24 border text-gray-700 dark:border-dark-5 dark:text-gray-300 mr-1"
+                @click="openModal('add')"
+            >
+              Add
+            </button>
+          </div>
         </div>
       </form>
     </div>
@@ -64,6 +73,43 @@
     <v-modal :show="showModal" @close="showModal = false">
       <div style="height: 600px; width: 500px; overflow-y: scroll;">
         <div class="block overflow-y-auto scrollbar-hidden  p-5 text-center">
+          <template v-if="modalType == 'add'">
+            <h2>Schedule Add</h2>
+            <table class="table table--sm">
+              <tbody>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Movie Id</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateSchedule.movie_id"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Date Start</td>
+                <td class="border border-gray-600 ">
+                  <input type="date" class="input form-control w-full border" v-model="state.updateSchedule.date_start"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Time Start</td>
+                <td class="border border-gray-600 ">
+                  <input type="datetime-local" id="date-start-add" class="input form-control w-full border" v-model="state.updateSchedule.time_start"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Time End</td>
+                <td class="border border-gray-600 ">
+                  <input type="datetime-local" id="date-end-add" class="input form-control w-full border" v-model="state.updateSchedule.time_end"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Room Id</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateSchedule.room_id"/>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </template>
           <template v-if="modalType == 'edit'">
             <h2>Schedule Update</h2>
             <table class="table table--sm">
@@ -75,7 +121,13 @@
                 </td>
               </tr>
               <tr>
-                <td class="border border-gray-600 bg-gray-300">Time Star</td>
+                <td class="border border-gray-600 bg-gray-300">Date Start</td>
+                <td class="border border-gray-600 ">
+                  <input class="input form-control w-full border" v-model="state.updateSchedule.date_start"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-gray-600 bg-gray-300">Time Start</td>
                 <td class="border border-gray-600 ">
                   <input type="datetime-local" id="date-start" class="input form-control w-full border" v-model="state.updateSchedule.time_start"/>
                 </td>
@@ -181,7 +233,7 @@
               class="btn w-24 border text-gray-700 dark:border-dark-5 dark:text-gray-300 mr-1"
               @click="submitModal(modalType)"
           >
-            Update
+            {{ modalType == 'add' ? 'Add' : 'Update' }}
           </button>
         </div>
       </div>
@@ -307,7 +359,7 @@ export default defineComponent({
       user: {},
       updateSchedule: {
         id: '',
-        name: '',
+        date_start: '',
         time_start: '',
         time_end: '',
         movie_id: '',
@@ -343,7 +395,9 @@ export default defineComponent({
         state.updateSchedule = {...item,
           time_start: moment(new Date(item.time_start)).format('YYYY-MM-DDTHH:mm'),
           time_end: moment(new Date(item.time_end)).format('YYYY-MM-DDTHH:mm'),
+          room_id: item.room.id
         }
+        console.log(state.updateSchedule)
         state.updateMovie = {...item.movie}
 
         modalType.value = type
@@ -352,6 +406,11 @@ export default defineComponent({
       if (type == 'delete') {
         deleteId.value = id
         submitDelete()
+      }
+
+      if (type == 'add') {
+        modalType.value = type
+        showModal.value = true
       }
     }
 
@@ -381,24 +440,15 @@ export default defineComponent({
     const submitModal = (type) => {
       loading.value = true
       if (type === 'edit') {
-
-        // Update movie
-
-        const id = state.updateMovie.id
-        axios.post(`admin/movie/update/${id}`, state.updateMovie)
-            .then((res) => {
-              if (res.status === 200) {
-                const data = res.data.data.movie
-                console.log(data)
-              }
-            })
-        const form = {...state.updateSchedule,
-          movie_id: state.updateMovie.id
+        const form = {
+          date_start: state.updateSchedule.time_start,
+          time_start: state.updateSchedule.time_start,
+          time_end: state.updateSchedule.time_end,
+          movie_id: state.updateMovie.id,
+          room_id: state.updateSchedule.room_id
         }
         console.log()
-        const idSchedule = form.id
-        console.log(id)
-        axios.post(`admin/schedule/update/${idSchedule}`, form)
+        axios.post(`admin/schedule/update/${state.updateSchedule.id}`, form)
             .then((res) => {
               if (res.status === 200) {
                 const data = res.data.data.schedule
@@ -418,6 +468,48 @@ export default defineComponent({
               }
             })
       }
+      if (type === 'add') {
+        const form = {
+          date_start: state.updateSchedule.time_start,
+          time_start: state.updateSchedule.time_start,
+          time_end: state.updateSchedule.time_end,
+          movie_id: state.updateSchedule.movie_id,
+          room_id: state.updateSchedule.room_id
+        }
+        console.log(form);
+        axios.post(`admin/schedule/store`, form)
+            .then((res) => {
+              if (res.status === 200) {
+                // const data = res.data.data.movie
+                Toastify({
+                  text: res.data.message,
+                  duration: 3000,
+                  newWindow: false,
+                  close: true,
+                  gravity: "top",
+                  position: "right",
+                  stopOnFocus: true,
+                }).showToast();
+                closeModal();
+                setTimeout(function () {
+                  loading.value = false
+                  window.location.reload();
+                }, 500)
+              }
+            })
+            .catch(err => {
+              loading.value = false
+              Toastify({
+                text: err.response.data.message,
+                duration: 3000,
+                newWindow: false,
+                close: true,
+                gravity: "top",
+                position: "right",
+                stopOnFocus: true,
+              }).showToast();
+            })
+      }
     }
 
     // Filter function
@@ -426,36 +518,8 @@ export default defineComponent({
       tabulator.value.setFilter(filter.field, filter.type, filter.value)
     }
 
-    // // Movie
-    // const imageFile = ref('')
-    // const imageUrl = ref('')
-
-    // var checkImage;
-    // function updatePreview(e) {
-    //   if (e.target.files.length === 0) {
-    //     return
-    //   }
-    //   imageFile.value = e.target.files[0]
-    //   state.updateMovie.image = e.target.files[0]
-    //   state.selectedFile = e.target.files[0]
-    //   checkImage = 1;
-    // }
-
-    // watch(imageFile, (imageFile) => {
-    //   const fileReader = new FileReader()
-    //
-    //   if (imageFile) {
-    //     fileReader.readAsDataURL(imageFile)
-    //     fileReader.addEventListener('load', () => {
-    //       imageUrl.value = fileReader.result
-    //     })
-    //   }
-    //   state.checkImage = 1
-    // })
-
     return {
-      // imageUrl,
-      // updatePreview,
+      openModal,
       showModal,
       state,
       modalType,
