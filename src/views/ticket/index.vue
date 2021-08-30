@@ -80,7 +80,7 @@
                   <input class="input form-control w-full border"
                          style="background-color: lightgrey"
                          onkeydown="return false"
-                         v-model="state.updateSchedule.name"/>
+                         v-model="state.updateSchedule.time_start"/>
                 </td>
               </tr>
               <tr>
@@ -123,6 +123,7 @@ import { useTabulator } from '@/composables'
 import cash from "cash-dom";
 import axios from "axios";
 import Toastify from "toastify-js"
+import dayjs from "dayjs";
 
 export default defineComponent({
   components: {},
@@ -165,8 +166,8 @@ export default defineComponent({
           resizable: false,
           formatter(cell) {
             return `<div class="flex items-center justify-center">
-                  ${(cell.getData().schedule.name)}
-                </div>`
+                   ${dayjs(cell.getData().schedule.time_start).format('YYYY-MM-DD HH:mm:ss')}
+              </div>`
           },
           cellClick: function (e, cell) {
             e.preventDefault()
@@ -263,17 +264,19 @@ export default defineComponent({
           'schedule_id': item.schedule.id,
           'user_id': item.user.id
         }
-        state.updateSchedule = {...item.schedule}
+        state.updateSchedule = {...item.schedule,
+          'time_start': dayjs(item.schedule.time_start).format('YYYY-MM-DD HH:mm:ss')
+        }
         state.updateUser = {...item.user}
+
+        modalType.value = type
+
+        showModal.value = true
       }
       if (type == 'delete') {
         deleteId.value = id
         submitDelete()
       }
-
-      modalType.value = type
-
-      showModal.value = true
     }
 
     const closeModal = () => {
